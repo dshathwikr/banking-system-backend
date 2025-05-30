@@ -28,7 +28,7 @@ This is the backend for a banking system application. It provides APIs for user 
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/dshathwikr/banking-system-backend.git
    cd banking-system-backend
    ```
 
