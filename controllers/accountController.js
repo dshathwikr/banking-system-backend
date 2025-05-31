@@ -8,15 +8,17 @@ const { z } = require("zod");
 const { getAccountNumber } = require("../utils/accountNumber");
 
 const signupSchema = z.object({
-  accountHolderName: z.string().min(1),
-  email: z.string().email(),
-  password: z.string().min(6),
+  accountHolderName: z.string().min(1, { message: "Name is required" }),
+  email: z.string().email({ message: "Invalid email" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
   accountType: z.enum(["Savings", "Current"]),
   balance: z.number().nonnegative().optional(),
 });
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email({ message: "Invalid email" }),
   password: z.string().min(1),
 });
 
@@ -147,7 +149,9 @@ async function depositMoney(req, res) {
 
 async function getTransactionHistory(req, res) {
   try {
-    const transactions = await Transaction.find({ account: req.user.id }).select("-_id -__v");
+    const transactions = await Transaction.find({
+      account: req.user.id,
+    }).select("-_id -__v");
     res.json(transactions);
   } catch (err) {
     console.error(err);
