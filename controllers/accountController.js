@@ -37,13 +37,8 @@ async function signup(req, res) {
     if (!result.success) {
       return res.status(400).json({ error: result.error.errors[0].message });
     }
-    const {
-      accountHolderName,
-      email,
-      password,
-      accountType,
-      balance = 0,
-    } = result.data;
+    const { accountHolderName, email, password, accountType, balance } =
+      result.data;
 
     let accountNumber;
     do {
@@ -86,9 +81,7 @@ async function login(req, res) {
     const isMatch = await bcrypt.compare(password, account.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ id: account._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ id: account._id }, process.env.JWT_SECRET);
     res.json({ token });
   } catch (err) {
     console.error(err);
